@@ -1,0 +1,7 @@
+synthetic-package: false
+output-dir: lib/core/localizations
+arb-dir: lib/core/l10n
+untranslated-messages-file: desiredFileName.txt
+format: true
+preferred-supported-locales: 
+  - ru
