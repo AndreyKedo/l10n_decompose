@@ -67,8 +67,8 @@ abstract class HomeLocalizations {
 
   final String localeName;
 
-  static HomeLocalizations? of(BuildContext context) {
-    return Localizations.of<HomeLocalizations>(context, HomeLocalizations);
+  static HomeLocalizations of(BuildContext context) {
+    return Localizations.of<HomeLocalizations>(context, HomeLocalizations)!;
   }
 
   static const LocalizationsDelegate<HomeLocalizations> delegate =

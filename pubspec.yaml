@@ -1,5 +1,5 @@
 name: l10n_decompose
-description: A sample command-line application with basic argument parsing.
+description: This CLI generate decomposed localization by different directories for each feature.
 version: 0.1.0
 repository: https://github.com/AndreyKedo/l10n_decompose
 

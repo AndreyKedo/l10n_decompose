@@ -1,5 +1,5 @@
 synthetic-package: false
-output-dir: lib/core/localizations
+output-dir: lib/core/localizations/gen
 arb-dir: lib/core/l10n
 untranslated-messages-file: desiredFileName.txt
 format: true

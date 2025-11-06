@@ -20,9 +20,9 @@ dir: lib/feature
 format: true
 
 #Optional; By default true inherited from flutter gen-l10n
-#nullable-getter: true
+nullable-getter: false
 
 # Optional; Setup part
 parts:
   - name: settings
-    outputDir: /lib/core/localizations
+    outputDir: /lib/core/localizations/gen
