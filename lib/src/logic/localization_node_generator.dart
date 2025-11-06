@@ -5,6 +5,7 @@ import 'package:l10n_decompose/cli_constants.dart';
 import 'package:l10n_decompose/src/model/l10n_decompose_config.dart';
 import 'package:l10n_decompose/src/model/localization_node.dart';
 import 'package:l10n_decompose/src/utils/console_utils.dart';
+import 'package:l10n_decompose/src/utils/path_utils.dart';
 import 'package:l10n_decompose/src/utils/string_extension.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart';
@@ -49,6 +50,15 @@ class LocalizationNodeGenerator {
   //   });
   // }
 
+  String resolveOutputDir(String currentPath, String outputPath) {
+    final context = PathUtils(currentPath);
+
+    if (context.isRelative(outputPath)) {
+      return join(currentPath, outputPath);
+    }
+    return outputPath.replaceFirst(context.separator, '');
+  }
+
   @protected
   @visibleForTesting
   LocalizationNodeConfig generatePartialConfig(Directory directory) {
@@ -59,9 +69,10 @@ class LocalizationNodeGenerator {
 
     for (var part in partsConfig) {
       if (part.name == partName) {
+        // Обработка абсолютных путей для outputDir
         return LocalizationNodeConfig(
-          arbDir: join(partPath, part.arbDir),
-          outputDir: join(partPath, part.outputDir),
+          arbDir: join(partPath, part.arbDir ?? config.arbDir),
+          outputDir: resolveOutputDir(directory.path, part.outputDir ?? config.outputDir),
           templateArbFile: replaceByPattern(
             part.templateArbFile ?? DefaultL10nDecomposeConfig.templateArbFile,
             partName,
@@ -76,9 +87,10 @@ class LocalizationNodeGenerator {
     }
 
     final className = convertToClassName(partName);
+
     return LocalizationNodeConfig(
       arbDir: join(partPath, config.arbDir),
-      outputDir: join(partPath, config.outputDir),
+      outputDir: resolveOutputDir(directory.path, config.outputDir),
       templateArbFile: replaceByPattern(DefaultL10nDecomposeConfig.templateArbFile, partName),
       outputLocalizationFile: replaceByPattern(config.outputLocalizationFile, partName),
       outputClass: replaceByPattern(config.outputClass, className),

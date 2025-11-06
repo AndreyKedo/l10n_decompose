@@ -14,7 +14,8 @@ template-arb-file: "%_en.arb"
 #Optional; By default l10n
 arb-dir: l10n
 
-#Optional; By default localization
+#Optional; By default, the directory name "localization" is used, which will be created relative to.
+# To place in an absolute directory, use / at the beginning of the path. For example /lib/core/localization
 output-dir: localization
 
 #Optional; By default use pattern %_localization.dart or static name.
@@ -32,20 +33,22 @@ nullable-getter: true
 # Optional; 
 parts:
   # Required;
-  - name: auth
+  - name: home
     # Optional; Use pattern %_en.arb or static name.
     template-arb-file: home_en.arb
-    # Optional; By default l10n
+    # Optional; By default use Global settings
     arbDir: l10n
-    # Optional; By default localization
+    # Optional; By default use Global settings
     outputDir: localization
-    # Optional; By default use pattern %_localization.dart or static name.
-    outputLocalizationFile: auth_localizations.dart
-    # Optional; By default use pattern %Localizations or static name.
-    outputClass: AuthLocalizations
+    # Optional; By default use Global settings
+    outputLocalizationFile: main_locale.dart
+    # Optional; By default use Global settings
+    outputClass: MainLocale
 ```
 
-After running the command `l10n-decompose`, the directory would look like this:
+And next step run command `dart run l10n_decompose`.
+
+After running the command `l10n-decompose`, the auth directory would look like this:
 ```
 auth
 ├── l10n

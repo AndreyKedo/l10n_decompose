@@ -8,7 +8,7 @@ dir: lib/feature
 #arb-dir: l10n
 
 #Optional; By default localization
-#output-dir: localization
+#output-dir: /lib/core/localizations
 
 #Optional; By default use pattern %_localization.dart or static name.
 #output-localization-file: "%_localization.dart"
@@ -23,10 +23,6 @@ format: true
 #nullable-getter: true
 
 # Optional; Setup part
-# parts:
-#   - name: home
-#     template-arb-file: home_en.arb
-#     arbDir: l10n
-#     outputDir: localization
-#     outputLocalizationFile: main_locale.dart
-#     outputClass: MainLocale
+parts:
+  - name: settings
+    outputDir: /lib/core/localizations

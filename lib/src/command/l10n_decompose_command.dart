@@ -8,14 +8,15 @@ import 'package:l10n_decompose/src/logic/config_parser.dart';
 import 'package:l10n_decompose/src/logic/file_system_tools.dart';
 import 'package:l10n_decompose/src/logic/localization_node_generator.dart';
 import 'package:l10n_decompose/src/model/l10n_decompose_options.dart';
-import 'package:l10n_decompose/src/utils/console_utils.dart';
+import 'package:l10n_decompose/src/utils/logger.dart';
 import 'package:path/path.dart';
 import 'package:yaml/yaml.dart';
 
 class L10nDecomposeCommand {
-  L10nDecomposeCommand({required this.resourceLoader});
+  L10nDecomposeCommand({required this.resourceLoader, required this.logger});
 
   final ResourceLoader<YamlMap> resourceLoader;
+  final AppLogger logger;
 
   String l10nConfig = DefaultL10nDecomposeConfig.l10nConfig;
   String newName = DefaultL10nDecomposeConfig.l10nConfig;
@@ -52,14 +53,15 @@ class L10nDecomposeCommand {
       final configuration = configDecode.convert(yamlSource);
 
       final directories = scanByPath(configuration.dir);
-      ConsolePrinter.i('Result scanEntries: ${directories.map((e) => e.path).toList(growable: false)}');
+      logger.d('Scanned directories: ${directories.map((e) => e.path).toList(growable: false)}');
 
       final nodeGenerator = LocalizationNodeGenerator(config: configuration);
 
       final nodes = nodeGenerator.generate(directories);
-      muteL10nConfig();
-      print(nodes);
+      // print(nodes);
       // completedWithError = false;
+      muteL10nConfig();
+
       for (var node in nodes) {
         final options = OptionsBuilder();
         options.addOption(L10nOption.arbDir(node.config.arbDir));
@@ -80,16 +82,20 @@ class L10nDecomposeCommand {
           }
         }
 
+        final optionsList = options.build();
+        logger.d("Command options $optionsList");
+
         final result = Process.runSync(CliConstants.flutter, [
           CliConstants.l10nCommand,
-          ...options.build().expand((option) => option.split(' ')),
+          ...optionsList.expand((option) => option.split(' ')),
         ]);
 
         if (result.exitCode != 0) {
+          logger.e("l10n command exit with code ${result.exitCode}");
           message = result.stderr;
           break;
         } else {
-          ConsolePrinter.i("Node ${node.name} is completed localization");
+          logger.d("Node ${node.name} is completed localization");
           completedWithError = false;
         }
       }
@@ -103,8 +109,10 @@ class L10nDecomposeCommand {
     unMiteL10nConfig();
 
     if (completedWithError) {
-      ConsolePrinter.e(message);
+      logger.e(message);
       exit(1);
+    } else {
+      logger.i('Localization is completed');
     }
   }
 }
