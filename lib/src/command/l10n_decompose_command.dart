@@ -58,6 +58,7 @@ class L10nDecomposeCommand {
       final nodeGenerator = LocalizationNodeGenerator(config: configuration);
 
       final nodes = nodeGenerator.generate(directories);
+
       // print(nodes);
       // completedWithError = false;
       muteL10nConfig();

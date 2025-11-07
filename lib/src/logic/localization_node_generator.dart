@@ -55,7 +55,7 @@ class LocalizationNodeGenerator {
 
   @protected
   @visibleForTesting
-  LocalizationNodeConfig generatePartialConfig(Directory directory) {
+  LocalizationNodeConfig? generatePartialConfig(Directory directory) {
     final partPath = directory.path;
     final directoryName = basename(directory.path);
 
@@ -63,9 +63,14 @@ class LocalizationNodeGenerator {
 
     for (var part in partsConfig) {
       if (part.name == directoryName) {
-        // Обработка абсолютных путей для outputDir
+        final arbDir = join(partPath, part.arbDir ?? config.arbDir);
+        if (!Directory(arbDir).existsSync()) {
+          logger.d('Directory $arbDir does not exist;');
+          return null;
+        }
+
         return LocalizationNodeConfig(
-          arbDir: join(partPath, part.arbDir ?? config.arbDir),
+          arbDir: arbDir,
           outputDir: resolveOutputDir(directory.path, part.outputDir ?? config.outputDir),
           templateArbFile: generateFileName(
             part.templateArbFile ?? config.templateArbFile,
@@ -80,8 +85,15 @@ class LocalizationNodeGenerator {
       }
     }
 
+    final arbDir = join(partPath, config.arbDir);
+
+    if (!Directory(arbDir).existsSync()) {
+      logger.d('Directory $arbDir does not exist;');
+      return null;
+    }
+
     return LocalizationNodeConfig(
-      arbDir: join(partPath, config.arbDir),
+      arbDir: arbDir,
       outputDir: resolveOutputDir(directory.path, config.outputDir),
       templateArbFile: generateFileName(config.templateArbFile, directoryName),
       outputLocalizationFile: generateFileName(config.outputLocalizationFile, directoryName),
@@ -93,9 +105,11 @@ class LocalizationNodeGenerator {
     final configParts = config.parts;
 
     final nodes = UnmodifiableListView(
-      forDirectories.map((directory) {
+      forDirectories.expand((directory) sync* {
         final config = generatePartialConfig(directory);
-        return LocalizationNode(name: basename(directory.path), directory: directory, config: config);
+        if (config != null) {
+          yield LocalizationNode(name: basename(directory.path), directory: directory, config: config);
+        }
       }),
     );
 
