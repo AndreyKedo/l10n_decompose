@@ -56,4 +56,23 @@ auth
 │   ├── auth_localizations.dart
 ```
 
-The CLI uses `flutter gen-l10n` to generate localization files.
+The CLI extends `flutter gen-l10n` and can be used together. For example, you can use the CLI to generate localization files for a specific directory and then use `flutter gen-l10n` to generate the localization files for the entire project. Example:
+```
+core
+├── l10n
+│   ├── app_en.arb
+│   ├── app_ru.arb
+├── localization
+│   ├── app_localizations_en.dart
+│   ├── app_localizations_ru.dart
+│   ├── app_localizations.dart
+feature
+├── auth
+|   ├── l10n
+|   │   ├── auth_en.arb
+|   │   ├── auth_ru.arb
+|   ├── localization
+|   │   ├── auth_localizations_en.dart
+|   │   ├── auth_localizations_ru.dart
+|   │   ├── auth_localizations.dart
+```
