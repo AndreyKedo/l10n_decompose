@@ -1,10 +1,10 @@
 import 'dart:collection';
 import 'dart:io';
 
-import 'package:l10n_decompose/cli_constants.dart';
 import 'package:l10n_decompose/src/model/l10n_decompose_config.dart';
 import 'package:l10n_decompose/src/model/localization_node.dart';
-import 'package:l10n_decompose/src/utils/console_utils.dart';
+import 'package:l10n_decompose/src/utils/logger.dart';
+import 'package:l10n_decompose/src/utils/path_utils.dart';
 import 'package:l10n_decompose/src/utils/string_extension.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart';
@@ -13,6 +13,7 @@ class LocalizationNodeGenerator {
   LocalizationNodeGenerator({required this.config});
 
   final L10nDecomposeConfig config;
+  final logger = AppLogger.named('LocalizationNodeGenerator');
 
   @protected
   @visibleForTesting
@@ -20,68 +21,71 @@ class LocalizationNodeGenerator {
     if (name.isEmpty) {
       throw StateError('Name cannot be empty');
     }
-    return name.split('_').map((part) => part.capitalizalize()).join('');
+    return name.split('_').map((part) => part.capitalize()).join('');
   }
 
   @protected
   @visibleForTesting
-  String replaceByPattern(String pattern, String value) {
-    return pattern.replaceFirst('%', value);
+  String generateFileName(String template, String featureName) {
+    if (extension(template).isEmpty) {
+      throw StateError('$template is not file name');
+    }
+
+    return template.replaceFirst('%', featureName);
   }
 
-  // {Set<String> exclude = const {}, Set<String> include = const {}}
-  //  final useFilter = include.isNotEmpty || exclude.isNotEmpty;
-  // if (useFilter) {
-  //   // Проверка пересечений
-  //   final intersection = include.intersection(exclude);
-  //   if (intersection.isNotEmpty) {
-  //     ConsolePrinter.w('Features $intersection are both included and excluded. Exclude takes precedence.');
-  //   }
+  @protected
+  @visibleForTesting
+  String generateClassFile(String template, String directoryName) {
+    final className = convertToClassName(directoryName);
 
-  //   entrees = entrees.where((entry) {
-  //     final dirName = pathUtils.basename(entry.path);
+    return template.replaceFirst('%', className);
+  }
 
-  //     if (exclude.contains(dirName)) return false;
+  @protected
+  @visibleForTesting
+  String resolveOutputDir(String currentPath, String outputPath) {
+    final context = PathUtils(currentPath);
 
-  //     if (include.isEmpty) return true;
-
-  //     return include.contains(dirName);
-  //   });
-  // }
+    if (context.isRelative(outputPath)) {
+      return join(currentPath, outputPath);
+    }
+    return outputPath.replaceFirst(context.separator, '');
+  }
 
   @protected
   @visibleForTesting
   LocalizationNodeConfig generatePartialConfig(Directory directory) {
     final partPath = directory.path;
-    final partName = basename(directory.path);
+    final directoryName = basename(directory.path);
 
     final partsConfig = config.parts;
 
     for (var part in partsConfig) {
-      if (part.name == partName) {
+      if (part.name == directoryName) {
+        // Обработка абсолютных путей для outputDir
         return LocalizationNodeConfig(
-          arbDir: join(partPath, part.arbDir),
-          outputDir: join(partPath, part.outputDir),
-          templateArbFile: replaceByPattern(
-            part.templateArbFile ?? DefaultL10nDecomposeConfig.templateArbFile,
-            partName,
+          arbDir: join(partPath, part.arbDir ?? config.arbDir),
+          outputDir: resolveOutputDir(directory.path, part.outputDir ?? config.outputDir),
+          templateArbFile: generateFileName(
+            part.templateArbFile ?? config.templateArbFile,
+            directoryName,
           ),
-          outputLocalizationFile: replaceByPattern(
+          outputLocalizationFile: generateFileName(
             part.outputLocalizationFile ?? config.outputLocalizationFile,
-            partName,
+            directoryName,
           ),
-          outputClass: replaceByPattern(part.outputClass ?? config.outputClass, convertToClassName(partName)),
+          outputClass: generateClassFile(part.outputClass ?? config.outputClass, directoryName),
         );
       }
     }
 
-    final className = convertToClassName(partName);
     return LocalizationNodeConfig(
       arbDir: join(partPath, config.arbDir),
-      outputDir: join(partPath, config.outputDir),
-      templateArbFile: replaceByPattern(DefaultL10nDecomposeConfig.templateArbFile, partName),
-      outputLocalizationFile: replaceByPattern(config.outputLocalizationFile, partName),
-      outputClass: replaceByPattern(config.outputClass, className),
+      outputDir: resolveOutputDir(directory.path, config.outputDir),
+      templateArbFile: generateFileName(config.templateArbFile, directoryName),
+      outputLocalizationFile: generateFileName(config.outputLocalizationFile, directoryName),
+      outputClass: generateClassFile(config.outputClass, directoryName),
     );
   }
 
@@ -97,7 +101,7 @@ class LocalizationNodeGenerator {
 
     for (var part in configParts) {
       if (!nodes.any((node) => part.name == node.name)) {
-        ConsolePrinter.w('Part ${part.name} is not found in directories');
+        logger.w('Part ${part.name} is not found in directories');
       }
     }
 

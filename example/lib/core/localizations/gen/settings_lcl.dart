@@ -5,24 +5,24 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
-import 'home_localization_en.dart';
-import 'home_localization_ru.dart';
+import 'settings_lcl_en.dart';
+import 'settings_lcl_ru.dart';
 
 // ignore_for_file: type=lint
 
-/// Callers can lookup localized strings with an instance of HomeLocalizations
-/// returned by `HomeLocalizations.of(context)`.
+/// Callers can lookup localized strings with an instance of SettingsLocalizations
+/// returned by `SettingsLocalizations.of(context)`.
 ///
-/// Applications need to include `HomeLocalizations.delegate()` in their app's
+/// Applications need to include `SettingsLocalizations.delegate()` in their app's
 /// `localizationDelegates` list, and the locales they support in the app's
 /// `supportedLocales` list. For example:
 ///
 /// ```dart
-/// import 'localization/home_localization.dart';
+/// import 'gen/settings_lcl.dart';
 ///
 /// return MaterialApp(
-///   localizationsDelegates: HomeLocalizations.localizationsDelegates,
-///   supportedLocales: HomeLocalizations.supportedLocales,
+///   localizationsDelegates: SettingsLocalizations.localizationsDelegates,
+///   supportedLocales: SettingsLocalizations.supportedLocales,
 ///   home: MyApplicationHome(),
 /// );
 /// ```
@@ -59,20 +59,23 @@ import 'home_localization_ru.dart';
 /// Select and expand the newly-created Localizations item then, for each
 /// locale your application supports, add a new item and select the locale
 /// you wish to add from the pop-up menu in the Value field. This list should
-/// be consistent with the languages listed in the HomeLocalizations.supportedLocales
+/// be consistent with the languages listed in the SettingsLocalizations.supportedLocales
 /// property.
-abstract class HomeLocalizations {
-  HomeLocalizations(String locale)
+abstract class SettingsLocalizations {
+  SettingsLocalizations(String locale)
     : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
-  static HomeLocalizations of(BuildContext context) {
-    return Localizations.of<HomeLocalizations>(context, HomeLocalizations)!;
+  static SettingsLocalizations of(BuildContext context) {
+    return Localizations.of<SettingsLocalizations>(
+      context,
+      SettingsLocalizations,
+    )!;
   }
 
-  static const LocalizationsDelegate<HomeLocalizations> delegate =
-      _HomeLocalizationsDelegate();
+  static const LocalizationsDelegate<SettingsLocalizations> delegate =
+      _SettingsLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -98,21 +101,21 @@ abstract class HomeLocalizations {
     Locale('ru'),
   ];
 
-  /// No description provided for @welcome.
+  /// No description provided for @settings.
   ///
-  /// In en, this message translates to:
-  /// **'Welcome to Flutter'**
-  String get welcome;
+  /// In ru, this message translates to:
+  /// **'Настройки'**
+  String get settings;
 }
 
-class _HomeLocalizationsDelegate
-    extends LocalizationsDelegate<HomeLocalizations> {
-  const _HomeLocalizationsDelegate();
+class _SettingsLocalizationsDelegate
+    extends LocalizationsDelegate<SettingsLocalizations> {
+  const _SettingsLocalizationsDelegate();
 
   @override
-  Future<HomeLocalizations> load(Locale locale) {
-    return SynchronousFuture<HomeLocalizations>(
-      lookupHomeLocalizations(locale),
+  Future<SettingsLocalizations> load(Locale locale) {
+    return SynchronousFuture<SettingsLocalizations>(
+      lookupSettingsLocalizations(locale),
     );
   }
 
@@ -121,20 +124,20 @@ class _HomeLocalizationsDelegate
       <String>['en', 'ru'].contains(locale.languageCode);
 
   @override
-  bool shouldReload(_HomeLocalizationsDelegate old) => false;
+  bool shouldReload(_SettingsLocalizationsDelegate old) => false;
 }
 
-HomeLocalizations lookupHomeLocalizations(Locale locale) {
+SettingsLocalizations lookupSettingsLocalizations(Locale locale) {
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
     case 'en':
-      return HomeLocalizationsEn();
+      return SettingsLocalizationsEn();
     case 'ru':
-      return HomeLocalizationsRu();
+      return SettingsLocalizationsRu();
   }
 
   throw FlutterError(
-    'HomeLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+    'SettingsLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
     'an issue with the localizations generation tool. Please file an issue '
     'on GitHub with a reproducible sample app and the gen-l10n configuration '
     'that was used.',

@@ -37,7 +37,7 @@ final class ResourceNotFoundException extends ResourceLoaderException {
 /// Exception thrown when a resource is not in the correct format.
 final class ResourceFormatException extends ResourceLoaderException {
   const ResourceFormatException([String? message])
-    : super(code: kCode, message: message ?? 'Resource format exception');
+      : super(code: kCode, message: message ?? 'Resource format exception');
 
   static const kCode = 'resource_format_exception';
 }
@@ -54,7 +54,7 @@ class YamlConfigurationLoader extends ResourceLoader<YamlMap> {
   YamlMap load(String path) {
     final file = File(path);
     if (!file.existsSync()) {
-      throw ResourceNotFoundException();
+      throw const ResourceNotFoundException();
     }
     final content = file.readAsStringSync();
     try {

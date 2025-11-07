@@ -1,28 +1,33 @@
 import 'package:args/args.dart';
+import 'package:l10n_decompose/global_options.dart';
 import 'package:l10n_decompose/src/command/l10n_decompose_command.dart';
 import 'package:l10n_decompose/src/datasource/resource_loader.dart';
+import 'package:l10n_decompose/src/utils/console_utils.dart';
+import 'package:l10n_decompose/src/utils/logger.dart';
+import 'package:logging/logging.dart';
 
 const String version = '0.0.1';
 
 ArgParser buildParser() {
   return ArgParser()
-    ..addFlag('help', abbr: 'h', negatable: false, help: 'Print this usage information.')
-    ..addFlag('verbose', abbr: 'v', negatable: false, help: 'Show additional command output.')
-    ..addFlag('version', negatable: false, help: 'Print the tool version.');
+    ..addFlag(GlobalOptions.help.name,
+        abbr: GlobalOptions.help.abbr, negatable: false, help: GlobalOptions.help.helpMessage)
+    ..addFlag(GlobalOptions.verbose.name,
+        abbr: GlobalOptions.verbose.abbr, negatable: false, help: GlobalOptions.verbose.helpMessage)
+    ..addFlag(GlobalOptions.version.name, negatable: false, help: GlobalOptions.version.helpMessage);
 }
 
 void printUsage(ArgParser argParser) {
-  print('Usage: dart l10n_decompose.dart <flags> [arguments]');
-  print(argParser.usage);
+  ConsolePrinter.i('\nUsage: dart l10n_decompose.dart <flags> [arguments]\n\n${argParser.usage}');
 }
 
 void main(List<String> arguments) {
-  final resourceLoader = YamlConfigurationLoader();
+  final resourceLoader = const YamlConfigurationLoader();
 
   final argParser = buildParser();
   try {
     final ArgResults results = argParser.parse(arguments);
-    bool verbose = false;
+    AppLogger.enableLogger();
 
     // Process the parsed arguments.
     if (results.flag('help')) {
@@ -30,24 +35,18 @@ void main(List<String> arguments) {
       return;
     }
     if (results.flag('version')) {
-      print('l10n_decompose version: $version');
+      ConsolePrinter.i(version);
       return;
     }
     if (results.flag('verbose')) {
-      verbose = true;
+      AppLogger.r.setLogLevel(Level.FINER);
     }
 
-    if (verbose) {
-      print('[VERBOSE] All arguments: ${results.arguments}');
-    }
-
-    final command = L10nDecomposeCommand(resourceLoader: resourceLoader);
+    final command = L10nDecomposeCommand(resourceLoader: resourceLoader, logger: AppLogger.r);
 
     command.execute(results);
   } on FormatException catch (e) {
-    // Print usage information if an invalid argument was provided.
-    print(e.message);
-    print('');
+    ConsolePrinter.e(e.message);
     printUsage(argParser);
   }
 }

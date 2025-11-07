@@ -67,11 +67,11 @@ abstract class ApplicationLocalizations {
 
   final String localeName;
 
-  static ApplicationLocalizations? of(BuildContext context) {
+  static ApplicationLocalizations of(BuildContext context) {
     return Localizations.of<ApplicationLocalizations>(
       context,
       ApplicationLocalizations,
-    );
+    )!;
   }
 
   static const LocalizationsDelegate<ApplicationLocalizations> delegate =
