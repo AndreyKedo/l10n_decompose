@@ -4,7 +4,7 @@ import 'package:yaml/yaml.dart';
 
 void main() {
   group('ResourceLoader', () {
-    final configFile = 'l10n-decompose.yaml';
+    final configFile = 'l10n-decompose.template.yaml';
     late ResourceLoader<YamlMap> loader;
 
     setUp(() {
