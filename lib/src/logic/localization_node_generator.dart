@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:l10n_decompose/cli_constants.dart';
 import 'package:l10n_decompose/src/model/l10n_decompose_config.dart';
 import 'package:l10n_decompose/src/model/localization_node.dart';
-import 'package:l10n_decompose/src/utils/console_utils.dart';
+import 'package:l10n_decompose/src/utils/logger.dart';
 import 'package:l10n_decompose/src/utils/path_utils.dart';
 import 'package:l10n_decompose/src/utils/string_extension.dart';
 import 'package:meta/meta.dart';
@@ -14,6 +14,7 @@ class LocalizationNodeGenerator {
   LocalizationNodeGenerator({required this.config});
 
   final L10nDecomposeConfig config;
+  final logger = AppLogger.named('LocalizationNodeGenerator');
 
   @protected
   @visibleForTesting
@@ -29,26 +30,6 @@ class LocalizationNodeGenerator {
   String replaceByPattern(String pattern, String value) {
     return pattern.replaceFirst('%', value);
   }
-
-  // {Set<String> exclude = const {}, Set<String> include = const {}}
-  //  final useFilter = include.isNotEmpty || exclude.isNotEmpty;
-  // if (useFilter) {
-  //   // Проверка пересечений
-  //   final intersection = include.intersection(exclude);
-  //   if (intersection.isNotEmpty) {
-  //     ConsolePrinter.w('Features $intersection are both included and excluded. Exclude takes precedence.');
-  //   }
-
-  //   entrees = entrees.where((entry) {
-  //     final dirName = pathUtils.basename(entry.path);
-
-  //     if (exclude.contains(dirName)) return false;
-
-  //     if (include.isEmpty) return true;
-
-  //     return include.contains(dirName);
-  //   });
-  // }
 
   String resolveOutputDir(String currentPath, String outputPath) {
     final context = PathUtils(currentPath);
@@ -109,7 +90,7 @@ class LocalizationNodeGenerator {
 
     for (var part in configParts) {
       if (!nodes.any((node) => part.name == node.name)) {
-        ConsolePrinter.w('Part ${part.name} is not found in directories');
+        logger.w('Part ${part.name} is not found in directories');
       }
     }
 

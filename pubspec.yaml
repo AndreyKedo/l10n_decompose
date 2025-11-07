@@ -3,6 +3,10 @@ description: This CLI generate decomposed localization by different directories 
 version: 0.1.0
 repository: https://github.com/AndreyKedo/l10n_decompose
 
+topics:
+  - l10n
+  - localization
+
 workspace: 
   - example
 

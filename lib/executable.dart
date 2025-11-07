@@ -1,4 +1,5 @@
 import 'package:args/args.dart';
+import 'package:l10n_decompose/global_options.dart';
 import 'package:l10n_decompose/src/command/l10n_decompose_command.dart';
 import 'package:l10n_decompose/src/datasource/resource_loader.dart';
 import 'package:l10n_decompose/src/utils/console_utils.dart';
@@ -9,9 +10,11 @@ const String version = '0.0.1';
 
 ArgParser buildParser() {
   return ArgParser()
-    ..addFlag('help', abbr: 'h', negatable: false, help: 'Print this usage information.')
-    ..addFlag('verbose', abbr: 'v', negatable: false, help: 'Show additional command output.')
-    ..addFlag('version', negatable: false, help: 'Print the tool version.');
+    ..addFlag(GlobalOptions.help.name,
+        abbr: GlobalOptions.help.abbr, negatable: false, help: GlobalOptions.help.helpMessage)
+    ..addFlag(GlobalOptions.verbose.name,
+        abbr: GlobalOptions.verbose.abbr, negatable: false, help: GlobalOptions.verbose.helpMessage)
+    ..addFlag(GlobalOptions.version.name, negatable: false, help: GlobalOptions.version.helpMessage);
 }
 
 void printUsage(ArgParser argParser) {
@@ -19,7 +22,7 @@ void printUsage(ArgParser argParser) {
 }
 
 void main(List<String> arguments) {
-  final resourceLoader = YamlConfigurationLoader();
+  final resourceLoader = const YamlConfigurationLoader();
 
   final argParser = buildParser();
   try {

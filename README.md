@@ -1,8 +1,6 @@
-# l10n-decompose
+CLI for generating localization spread across different directories.
 
-This CLI generate decomposed localization by different directories for each feature.
-
-For example, if you have a function called `auth`, you would create a directory called `l10n` within the `auth` directory and add the .arb localization files. Create a configuration file `l10n-decompose.yaml`.
+For example, if you have a function called `auth`, you would create a directory called `l10n` within the `auth` directory and add the .arb localization files. Create a configuration file `l10n-decompose.yaml` and run command `dart run l10n_decompose`.
 
 ```yaml
 # Required
@@ -14,7 +12,7 @@ template-arb-file: "%_en.arb"
 #Optional; By default l10n
 arb-dir: l10n
 
-#Optional; By default, the directory name "localization" is used, which will be created relative to.
+# Optional; By default, the directory name "localization" is used, which will be created relative to.
 # To place in an absolute directory, use / at the beginning of the path. For example /lib/core/localization
 output-dir: localization
 
@@ -46,8 +44,6 @@ parts:
     outputClass: MainLocale
 ```
 
-And next step run command `dart run l10n_decompose`.
-
 After running the command `l10n-decompose`, the auth directory would look like this:
 ```
 auth
@@ -59,3 +55,5 @@ auth
 │   ├── auth_localizations_ru.dart
 │   ├── auth_localizations.dart
 ```
+
+The CLI uses `flutter gen-l10n` to generate localization files.
