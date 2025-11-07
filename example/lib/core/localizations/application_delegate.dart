@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'gen/app_localizations.dart';
-import 'gen/settings_localization.dart';
+import 'gen/settings_lcl.dart';
 
 abstract final class ApplicationDelegate {
   static const localizationsDelegates = <LocalizationsDelegate<Object>>[
@@ -20,5 +20,5 @@ abstract final class ApplicationDelegate {
 extension ApplicationLocalization on BuildContext {
   AppLocalizations get lcl => AppLocalizations.of(this)!;
 
-  SettingsLocalizations get lclSettings => SettingsLocalizations.of(this)!;
+  SettingsLocalizations get lclSettings => SettingsLocalizations.of(this);
 }

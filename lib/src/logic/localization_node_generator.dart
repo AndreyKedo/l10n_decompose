@@ -1,7 +1,6 @@
 import 'dart:collection';
 import 'dart:io';
 
-import 'package:l10n_decompose/cli_constants.dart';
 import 'package:l10n_decompose/src/model/l10n_decompose_config.dart';
 import 'package:l10n_decompose/src/model/localization_node.dart';
 import 'package:l10n_decompose/src/utils/logger.dart';
@@ -22,15 +21,29 @@ class LocalizationNodeGenerator {
     if (name.isEmpty) {
       throw StateError('Name cannot be empty');
     }
-    return name.split('_').map((part) => part.capitalizalize()).join('');
+    return name.split('_').map((part) => part.capitalize()).join('');
   }
 
   @protected
   @visibleForTesting
-  String replaceByPattern(String pattern, String value) {
-    return pattern.replaceFirst('%', value);
+  String generateFileName(String template, String featureName) {
+    if (extension(template).isEmpty) {
+      throw StateError('$template is not file name');
+    }
+
+    return template.replaceFirst('%', featureName);
   }
 
+  @protected
+  @visibleForTesting
+  String generateClassFile(String template, String directoryName) {
+    final className = convertToClassName(directoryName);
+
+    return template.replaceFirst('%', className);
+  }
+
+  @protected
+  @visibleForTesting
   String resolveOutputDir(String currentPath, String outputPath) {
     final context = PathUtils(currentPath);
 
@@ -44,37 +57,35 @@ class LocalizationNodeGenerator {
   @visibleForTesting
   LocalizationNodeConfig generatePartialConfig(Directory directory) {
     final partPath = directory.path;
-    final partName = basename(directory.path);
+    final directoryName = basename(directory.path);
 
     final partsConfig = config.parts;
 
     for (var part in partsConfig) {
-      if (part.name == partName) {
+      if (part.name == directoryName) {
         // Обработка абсолютных путей для outputDir
         return LocalizationNodeConfig(
           arbDir: join(partPath, part.arbDir ?? config.arbDir),
           outputDir: resolveOutputDir(directory.path, part.outputDir ?? config.outputDir),
-          templateArbFile: replaceByPattern(
-            part.templateArbFile ?? DefaultL10nDecomposeConfig.templateArbFile,
-            partName,
+          templateArbFile: generateFileName(
+            part.templateArbFile ?? config.templateArbFile,
+            directoryName,
           ),
-          outputLocalizationFile: replaceByPattern(
+          outputLocalizationFile: generateFileName(
             part.outputLocalizationFile ?? config.outputLocalizationFile,
-            partName,
+            directoryName,
           ),
-          outputClass: replaceByPattern(part.outputClass ?? config.outputClass, convertToClassName(partName)),
+          outputClass: generateClassFile(part.outputClass ?? config.outputClass, directoryName),
         );
       }
     }
 
-    final className = convertToClassName(partName);
-
     return LocalizationNodeConfig(
       arbDir: join(partPath, config.arbDir),
       outputDir: resolveOutputDir(directory.path, config.outputDir),
-      templateArbFile: replaceByPattern(DefaultL10nDecomposeConfig.templateArbFile, partName),
-      outputLocalizationFile: replaceByPattern(config.outputLocalizationFile, partName),
-      outputClass: replaceByPattern(config.outputClass, className),
+      templateArbFile: generateFileName(config.templateArbFile, directoryName),
+      outputLocalizationFile: generateFileName(config.outputLocalizationFile, directoryName),
+      outputClass: generateClassFile(config.outputClass, directoryName),
     );
   }
 

@@ -1,28 +1,11 @@
 # Required
 dir: lib/feature
 
-# Required;
-#template-arb-file: "%_en.arb"
-
-#Optional; By default l10n
-#arb-dir: l10n
-
-#Optional; By default localization
-#output-dir: /lib/core/localizations
-
-#Optional; By default use pattern %_localization.dart or static name.
-#output-localization-file: "%_localization.dart"
-
-#Optional; By default use pattern %Localizations or static name.
-#output-class: "%Localizations"
-
-#Optional; By default false inherited from flutter gen-l10n
 format: true
-
-#Optional; By default true inherited from flutter gen-l10n
 nullable-getter: false
 
-# Optional; Setup part
 parts:
   - name: settings
     outputDir: /lib/core/localizations/gen
+    template-arb-file: settings_ru.arb
+    outputLocalizationFile: settings_lcl.dart

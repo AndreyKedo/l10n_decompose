@@ -17,7 +17,7 @@ final class DirectoryNotFoundException extends DirectoryScannerException {
 List<Directory> scanByPath(String path) {
   final directory = Directory(path);
   if (!directory.existsSync()) {
-    throw DirectoryNotFoundException();
+    throw const DirectoryNotFoundException();
   }
   return UnmodifiableListView(directory.listSync(followLinks: false).whereType<Directory>());
 }

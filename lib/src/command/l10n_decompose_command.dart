@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:args/args.dart';
 import 'package:l10n_decompose/cli_constants.dart';
 import 'package:l10n_decompose/src/datasource/resource_loader.dart';
-import 'package:l10n_decompose/src/logic/command_builder.dart';
+import 'package:l10n_decompose/src/logic/options_builder.dart';
 import 'package:l10n_decompose/src/logic/config_parser.dart';
 import 'package:l10n_decompose/src/logic/file_system_tools.dart';
 import 'package:l10n_decompose/src/logic/localization_node_generator.dart';

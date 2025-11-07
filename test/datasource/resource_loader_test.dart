@@ -8,7 +8,7 @@ void main() {
     late ResourceLoader<YamlMap> loader;
 
     setUp(() {
-      loader = YamlConfigurationLoader();
+      loader = const YamlConfigurationLoader();
     });
 
     test('loads YAML config file', () {

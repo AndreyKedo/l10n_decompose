@@ -5,8 +5,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
-import 'settings_localization_en.dart';
-import 'settings_localization_ru.dart';
+import 'settings_lcl_en.dart';
+import 'settings_lcl_ru.dart';
 
 // ignore_for_file: type=lint
 
@@ -18,7 +18,7 @@ import 'settings_localization_ru.dart';
 /// `supportedLocales` list. For example:
 ///
 /// ```dart
-/// import 'gen/settings_localization.dart';
+/// import 'gen/settings_lcl.dart';
 ///
 /// return MaterialApp(
 ///   localizationsDelegates: SettingsLocalizations.localizationsDelegates,
@@ -103,8 +103,8 @@ abstract class SettingsLocalizations {
 
   /// No description provided for @settings.
   ///
-  /// In en, this message translates to:
-  /// **'Settings'**
+  /// In ru, this message translates to:
+  /// **'Настройки'**
   String get settings;
 }
 
