@@ -6,6 +6,6 @@ nullable-getter: false
 
 parts:
   - name: settings
-    outputDir: /lib/core/localizations/gen
-    template-arb-file: settings_ru.arb
-    outputLocalizationFile: settings_lcl.dart
+    template-arb-file: settings_en.arb
+    arbDir: localization/arb
+    outputDir: localization/gen

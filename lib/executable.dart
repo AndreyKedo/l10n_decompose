@@ -6,7 +6,7 @@ import 'package:l10n_decompose/src/utils/console_utils.dart';
 import 'package:l10n_decompose/src/utils/logger.dart';
 import 'package:logging/logging.dart';
 
-const String version = '0.0.1';
+const String version = '0.1.0';
 
 ArgParser buildParser() {
   return ArgParser()
