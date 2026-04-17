@@ -1,59 +1,70 @@
+## l10n Decompose
+
+[![Pub](https://img.shields.io/pub/v/l10n_decompose.svg)](https://pub.dev/packages/l10n_decompose)
+
 Helpful CLI for generating localization spread across different directories. For generating localization using `flutter gen-l10n`.
 
 ## Get started
 
 Add dev dependency to your project `dart pub add dev:l10n_decompose`
 
-```yaml
-dev_dependencies:
-  l10n_decompose: ^0.1.0
-```
+Add the section configuration to `pubspec.yaml`
 
 ## How to use
 
-For example, if you have a feature `auth`, you would create a directory called `l10n` within the `auth` directory and add the .arb localization files. Create a configuration file `l10n-decompose.yaml` and run command `dart run l10n_decompose`.
+For example, if you have an `auth` function, you could create a directory named `l10n` inside the `auth` directory and add the .arb localization files there. Add the section configuration to `pubspec.yaml` and run `dart run l10n_decompose`.
 
-Full configuration file:
+A partition configuration looks like this:
 ```yaml
-# Required
-dir: lib/feature
+l10n_decompose:
+  # Required
+  dir: lib/feature
 
-# Optional; Use pattern %_en.arb or static name.
-template-arb-file: "%_en.arb"
+  # Optional; Use pattern %_en.arb or static name.
+  template-arb-file: "%_en.arb"
 
-#Optional; By default l10n
-arb-dir: l10n
+  #Optional; By default l10n
+  arb-dir: l10n
 
-# Optional; By default, the directory name "localization" is used, which will be created relative to.
-# To place in an absolute directory, use / at the beginning of the path. For example /lib/core/localization
-output-dir: localization
+  #Optional; By default, the directory name "localization" is used, which will be created relative to.
+  # To place in an absolute directory, use / at the beginning of the path. For example /lib/core/localization
+  output-dir: localization
 
-#Optional; By default use pattern %_localization.dart or static name.
-output-localization-file: "%_localization.dart"
+  #Optional; By default use pattern %_localization.dart or static name.
+  output-localization-file: "%_localization.dart"
 
-#Optional; By default use pattern %Localizations or static name.
-output-class: "%Localizations"
+  #Optional; By default use pattern %Localizations or static name.
+  output-class: "%Localizations"
 
-#Optional; By default false inherited from flutter gen-l10n
-format: false
+  #Optional; By default false inherited from flutter gen-l10n
+  format: false
 
-#Optional; By default true inherited from flutter gen-l10n
-nullable-getter: true
+  #Optional; By default true inherited from flutter gen-l10n
+  nullable-getter: true
 
-# Optional; 
-parts:
-  # Required;
-  - name: home
-    # Optional; Use pattern %_en.arb or static name.
-    template-arb-file: home_en.arb
-    # Optional; By default use Global settings
-    arbDir: l10n
-    # Optional; By default use Global settings
-    outputDir: localization
-    # Optional; By default use Global settings
-    outputLocalizationFile: main_locale.dart
-    # Optional; By default use Global settings
-    outputClass: MainLocale
+  # Settings for generating a common file for all localization delegates.
+  composite:
+    # Required;
+    enabled: true
+    # Optional; By default relative to lib directory.
+    outputFile: lib/composite_localizations.dart
+    # Optional; By default CompositeLocalizations
+    outputClass: CompositeLocalizations
+
+  # Optional; 
+  parts:
+    # Required;
+    - name: home
+      # Optional; Use pattern %_en.arb or static name.
+      template-arb-file: home_en.arb
+      # Optional; By default use Global settings
+      arbDir: l10n
+      # Optional; By default use Global settings
+      outputDir: localization
+      # Optional; By default use Global settings
+      outputLocalizationFile: main_locale.dart
+      # Optional; By default use Global settings
+      outputClass: MainLocale
 ```
 
 After running the command, the auth directory would look like this:
@@ -88,4 +99,38 @@ feature
 |   │   ├── auth_localizations_en.dart
 |   │   ├── auth_localizations_ru.dart
 |   │   ├── auth_localizations.dart
+```
+
+### Generate delegates file
+
+To generate a file that combines all generated delegates, use a `composite` configuration part.
+
+```yaml
+l10n_decompose:
+  # Required;
+  dir: lib/feature
+  composite:
+    # Required;
+    enabled: true
+    # Optional; By default relative to lib directory.
+    outputFile: lib/composite_localizations.dart
+    # Optional; By default CompositeLocalizations
+    outputClass: CompositeLocalizations
+```
+
+After generate the command, the directory would look like this:
+
+```
+lib
+├── composite_localizations.dart
+|
+├── feature
+|   ├── auth
+|   |   ├── l10n
+|   |   │   ├── auth_en.arb
+|   |   │   ├── auth_ru.arb
+|   |   ├── localization
+|   |   │   ├── auth_localizations_en.dart
+|   |   │   ├── auth_localizations_ru.dart
+|   |   │   ├── auth_localizations.dart
 ```
