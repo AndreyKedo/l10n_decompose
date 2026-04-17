@@ -18,10 +18,10 @@ extension type const DefaultL10nDecomposeConfig(String value) implements String 
   static const defaultWorkDirectory = DefaultL10nDecomposeConfig('lib/feature');
   static const arbDir = DefaultL10nDecomposeConfig('l10n');
   static const outputDir = DefaultL10nDecomposeConfig('localization');
-  static const outputLocalizationFile = DefaultL10nDecomposeConfig('%_localization.dart');
-  static const outputClass = DefaultL10nDecomposeConfig('%Localizations');
+  static const outputLocalizationFile = DefaultL10nDecomposeConfig('*_localization.dart');
+  static const outputClass = DefaultL10nDecomposeConfig('*Localizations');
   static const preferredLocale = DefaultL10nDecomposeConfig('en');
-  static const templateArbFile = DefaultL10nDecomposeConfig('%_$preferredLocale.arb');
-  static const compositeClassName = DefaultL10nDecomposeConfig('CompositeLocalizations');
-  static const compositeFilePath = DefaultL10nDecomposeConfig('lib/composite_localizations.dart');
+  static const templateArbFile = DefaultL10nDecomposeConfig('*_$preferredLocale.arb');
+  static const compositeClassName = DefaultL10nDecomposeConfig('GeneralLocalizations');
+  static const compositeFilePath = DefaultL10nDecomposeConfig('lib/general_localizations.dart');
 }

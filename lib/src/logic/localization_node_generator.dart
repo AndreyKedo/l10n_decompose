@@ -30,8 +30,7 @@ class LocalizationNodeGenerator {
     if (extension(template).isEmpty) {
       throw StateError('$template is not file name');
     }
-
-    return template.replaceFirst('%', featureName);
+    return template.replaceFirst('*', featureName);
   }
 
   @protected
@@ -39,7 +38,7 @@ class LocalizationNodeGenerator {
   String generateClassFile(String template, String directoryName) {
     final className = convertToClassName(directoryName);
 
-    return template.replaceFirst('%', className);
+    return template.replaceFirst('*', className);
   }
 
   @protected

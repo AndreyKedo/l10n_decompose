@@ -4,8 +4,8 @@ l10n_decompose:
   # Required
   dir: lib/feature
 
-  # Optional; Use pattern %_en.arb or static name.
-  template-arb-file: "%_en.arb"
+  # Optional; Use pattern *_en.arb or static name.
+  template-arb-file: "*_en.arb"
 
   #Optional; By default l10n
   arb-dir: l10n
@@ -14,11 +14,11 @@ l10n_decompose:
   # To place in an absolute directory, use / at the beginning of the path. For example /lib/core/localization
   output-dir: localization
 
-  #Optional; By default use pattern %_localization.dart or static name.
-  output-localization-file: "%_localization.dart"
+  #Optional; By default use pattern *_localization.dart or static name.
+  output-localization-file: "*_localization.dart"
 
-  #Optional; By default use pattern %Localizations or static name.
-  output-class: "%Localizations"
+  #Optional; By default use pattern *Localizations or static name.
+  output-class: "*Localizations"
 
   #Optional; By default false inherited from flutter gen-l10n
   format: false
@@ -30,15 +30,15 @@ l10n_decompose:
     # Required;
     enabled: true
     # Optional; By default relative to lib directory.
-    outputFile: lib/composite_localizations.dart
-    # Optional; By default CompositeLocalizations
-    outputClass: CompositeLocalizations
+    outputFile: lib/general_localizations.dart
+    # Optional; By default GeneralLocalizations
+    outputClass: GeneralLocalizations
 
   # Optional; 
   parts:
     # Required;
     - name: home
-      # Optional; Use pattern %_en.arb or static name.
+      # Optional; Use pattern *_en.arb or static name.
       template-arb-file: home_en.arb
       # Optional; By default use Global settings
       arbDir: l10n

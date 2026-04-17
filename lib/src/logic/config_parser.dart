@@ -73,13 +73,13 @@ class ConfigParser with Converter<L10nManifest, L10nDecomposeConfig> {
     return L10nDecomposeOptions(options);
   }
 
-  CompositeFileConfig? _parseComposite(Object? input) {
+  DelegatesClassConfig? _parseComposite(Object? input) {
     if (input == null) return null;
     if (input is! Map) return null;
 
     if (input['enabled'] case false) return null;
 
-    return CompositeFileConfig(
+    return DelegatesClassConfig(
       filePath: _parseString(input['outputFile'], DefaultL10nDecomposeConfig.compositeFilePath),
       outputClass: _parseString(input['outputClass'], DefaultL10nDecomposeConfig.compositeClassName),
     );

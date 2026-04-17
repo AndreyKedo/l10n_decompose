@@ -108,6 +108,8 @@ class L10nDecomposeCommand {
       if (!completedWithError) {
         // Generate composite delegates file
         if (configuration.composite case final composite when composite != null) {
+          final stopwatch = Stopwatch()..start();
+          logger.d("Create a general localization delegates file...");
           final manifest = manifestParser.convert(manifestSource);
           final compositeFileBuilder = DelegatesClassBuilder(
             package: manifest.package,
@@ -116,6 +118,7 @@ class L10nDecomposeCommand {
           );
 
           File(composite.filePath).writeAsStringSync(compositeFileBuilder.build());
+          logger.d("Create is completed. Time: ${stopwatch.elapsedMilliseconds}ms");
         }
       }
     } on ResourceLoaderException catch (e) {

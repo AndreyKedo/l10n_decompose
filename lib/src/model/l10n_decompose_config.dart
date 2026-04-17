@@ -93,7 +93,7 @@ class L10nDecomposeConfig {
   final L10nDecomposeOptions options;
 
   /// The composite config for the features.
-  final CompositeFileConfig? composite;
+  final DelegatesClassConfig? composite;
 
   @override
   String toString() {
@@ -202,9 +202,9 @@ class LocalizationPartialConfig {
 ///    outputClass: CompositeLocalizations
 /// ```
 /// {@endtemplate}
-class CompositeFileConfig {
+class DelegatesClassConfig {
   /// {@macro l10n_decompose_config.composition_config}
-  CompositeFileConfig({
+  DelegatesClassConfig({
     required this.filePath,
     required this.outputClass,
   });
@@ -214,6 +214,6 @@ class CompositeFileConfig {
 
   @override
   String toString() {
-    return 'CompositeFileConfig(filePath: $filePath, outputClass: $outputClass)';
+    return 'DelegatesClassConfig(filePath: $filePath, outputClass: $outputClass)';
   }
 }
