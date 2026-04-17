@@ -25,3 +25,23 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   generate: true
+
+l10n_decompose:
+  # Required
+  dir: lib/feature
+
+  format: true
+  nullable-getter: false
+
+  composite:
+    enabled: true
+    # Optional; By default relative to lib directory.
+    outputFile: lib/core/composite_localizations.dart
+    # Optional; By default CompositeLocalizations
+    outputClass: CompositeLocalizations
+
+  parts:
+    - name: settings
+      template-arb-file: settings_en.arb
+      arbDir: localization/arb
+      outputDir: localization/gen

@@ -14,6 +14,9 @@ final class DirectoryNotFoundException extends DirectoryScannerException {
   static const kCode = 'directory_not_found';
 }
 
+/// Scan a directory by path.
+///
+/// Returns a list of directories.
 List<Directory> scanByPath(String path) {
   final directory = Directory(path);
   if (!directory.existsSync()) {

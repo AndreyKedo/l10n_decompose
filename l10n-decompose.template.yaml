@@ -1,39 +1,50 @@
-# Required
-dir: lib/feature
+name: package_name
 
-# Optional; Use pattern %_en.arb or static name.
-template-arb-file: "%_en.arb"
+l10n_decompose:
+  # Required
+  dir: lib/feature
 
-#Optional; By default l10n
-arb-dir: l10n
+  # Optional; Use pattern %_en.arb or static name.
+  template-arb-file: "%_en.arb"
 
-#Optional; By default, the directory name "localization" is used, which will be created relative to.
-# To place in an absolute directory, use / at the beginning of the path. For example /lib/core/localization
-output-dir: localization
+  #Optional; By default l10n
+  arb-dir: l10n
 
-#Optional; By default use pattern %_localization.dart or static name.
-output-localization-file: "%_localization.dart"
+  #Optional; By default, the directory name "localization" is used, which will be created relative to.
+  # To place in an absolute directory, use / at the beginning of the path. For example /lib/core/localization
+  output-dir: localization
 
-#Optional; By default use pattern %Localizations or static name.
-output-class: "%Localizations"
+  #Optional; By default use pattern %_localization.dart or static name.
+  output-localization-file: "%_localization.dart"
 
-#Optional; By default false inherited from flutter gen-l10n
-format: false
+  #Optional; By default use pattern %Localizations or static name.
+  output-class: "%Localizations"
 
-#Optional; By default true inherited from flutter gen-l10n
-nullable-getter: true
+  #Optional; By default false inherited from flutter gen-l10n
+  format: false
 
-# Optional; 
-parts:
-  # Required;
-  - name: home
-    # Optional; Use pattern %_en.arb or static name.
-    template-arb-file: home_en.arb
-    # Optional; By default use Global settings
-    arbDir: l10n
-    # Optional; By default use Global settings
-    outputDir: localization
-    # Optional; By default use Global settings
-    outputLocalizationFile: main_locale.dart
-    # Optional; By default use Global settings
-    outputClass: MainLocale
+  #Optional; By default true inherited from flutter gen-l10n
+  nullable-getter: true
+
+  composite:
+    # Required;
+    enabled: true
+    # Optional; By default relative to lib directory.
+    outputFile: lib/composite_localizations.dart
+    # Optional; By default CompositeLocalizations
+    outputClass: CompositeLocalizations
+
+  # Optional; 
+  parts:
+    # Required;
+    - name: home
+      # Optional; Use pattern %_en.arb or static name.
+      template-arb-file: home_en.arb
+      # Optional; By default use Global settings
+      arbDir: l10n
+      # Optional; By default use Global settings
+      outputDir: localization
+      # Optional; By default use Global settings
+      outputLocalizationFile: main_locale.dart
+      # Optional; By default use Global settings
+      outputClass: MainLocale

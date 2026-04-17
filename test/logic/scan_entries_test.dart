@@ -1,7 +1,7 @@
 import 'dart:collection';
 import 'dart:io';
 
-import 'package:l10n_decompose/src/logic/file_system_tools.dart';
+import 'package:l10n_decompose/src/logic/directory_scanner.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
