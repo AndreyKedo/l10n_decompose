@@ -7,8 +7,8 @@ import 'package:l10n_decompose/src/logic/delegates_class_builder.dart';
 import 'package:l10n_decompose/src/logic/manifest_parser.dart';
 import 'package:l10n_decompose/src/logic/options_builder.dart';
 import 'package:l10n_decompose/src/logic/config_parser.dart';
-import 'package:l10n_decompose/src/logic/directory_scanner.dart';
 import 'package:l10n_decompose/src/logic/localization_node_generator.dart';
+import 'package:l10n_decompose/src/logic/scanner/glob_scanner.dart';
 import 'package:l10n_decompose/src/logic/yaml_validation_exception.dart';
 import 'package:l10n_decompose/src/model/l10n_decompose_options.dart';
 import 'package:l10n_decompose/src/utils/logger.dart';
@@ -55,12 +55,13 @@ class L10nDecomposeCommand {
 
       final configuration = manifestParser.fuse(configDecode).convert(manifestSource);
 
-      final directories = scanByPath(configuration.dir);
-      logger.d('Scanned directories: ${directories.map((e) => e.path).toList(growable: false)}');
+      final arbFiles = GlobScanner(lookupPattern: configuration.inputPattern).scan();
+
+      logger.d('Scanned directories: $arbFiles');
 
       final nodeGenerator = LocalizationNodeGenerator(config: configuration);
 
-      final nodes = nodeGenerator.generate(directories);
+      final nodes = nodeGenerator.generate(arbFiles);
 
       // Утилита `flutter gen-l10n` по умолчанию ищет файл `l10n.yaml` в текущей директории.
       // Если она его находит, то игнорирует все переданные параметры и устанавливает его в качестве основного файла конфигурации.
@@ -93,6 +94,9 @@ class L10nDecomposeCommand {
           CliConstants.l10nCommand,
           ...optionsList.expand((option) => option.split(' ')),
         ]);
+
+        // logger.d("Node ${node.name} is completed localization");
+        // completedWithError = false;
 
         if (result.exitCode != 0) {
           logger.e("l10n command exit with code ${result.exitCode}");

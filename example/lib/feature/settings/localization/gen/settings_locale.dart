@@ -5,24 +5,24 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
-import 'settings_lcl_en.dart';
-import 'settings_lcl_ru.dart';
+import 'settings_locale_en.dart';
+import 'settings_locale_ru.dart';
 
 // ignore_for_file: type=lint
 
-/// Callers can lookup localized strings with an instance of SettingsLocalizations
-/// returned by `SettingsLocalizations.of(context)`.
+/// Callers can lookup localized strings with an instance of SettingsLocalization
+/// returned by `SettingsLocalization.of(context)`.
 ///
-/// Applications need to include `SettingsLocalizations.delegate()` in their app's
+/// Applications need to include `SettingsLocalization.delegate()` in their app's
 /// `localizationDelegates` list, and the locales they support in the app's
 /// `supportedLocales` list. For example:
 ///
 /// ```dart
-/// import 'gen/settings_lcl.dart';
+/// import 'gen/settings_locale.dart';
 ///
 /// return MaterialApp(
-///   localizationsDelegates: SettingsLocalizations.localizationsDelegates,
-///   supportedLocales: SettingsLocalizations.supportedLocales,
+///   localizationsDelegates: SettingsLocalization.localizationsDelegates,
+///   supportedLocales: SettingsLocalization.supportedLocales,
 ///   home: MyApplicationHome(),
 /// );
 /// ```
@@ -59,23 +59,23 @@ import 'settings_lcl_ru.dart';
 /// Select and expand the newly-created Localizations item then, for each
 /// locale your application supports, add a new item and select the locale
 /// you wish to add from the pop-up menu in the Value field. This list should
-/// be consistent with the languages listed in the SettingsLocalizations.supportedLocales
+/// be consistent with the languages listed in the SettingsLocalization.supportedLocales
 /// property.
-abstract class SettingsLocalizations {
-  SettingsLocalizations(String locale)
+abstract class SettingsLocalization {
+  SettingsLocalization(String locale)
     : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
-  static SettingsLocalizations of(BuildContext context) {
-    return Localizations.of<SettingsLocalizations>(
+  static SettingsLocalization of(BuildContext context) {
+    return Localizations.of<SettingsLocalization>(
       context,
-      SettingsLocalizations,
+      SettingsLocalization,
     )!;
   }
 
-  static const LocalizationsDelegate<SettingsLocalizations> delegate =
-      _SettingsLocalizationsDelegate();
+  static const LocalizationsDelegate<SettingsLocalization> delegate =
+      _SettingsLocalizationDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -103,19 +103,19 @@ abstract class SettingsLocalizations {
 
   /// No description provided for @settings.
   ///
-  /// In ru, this message translates to:
-  /// **'Настройки'**
+  /// In en, this message translates to:
+  /// **'Settings'**
   String get settings;
 }
 
-class _SettingsLocalizationsDelegate
-    extends LocalizationsDelegate<SettingsLocalizations> {
-  const _SettingsLocalizationsDelegate();
+class _SettingsLocalizationDelegate
+    extends LocalizationsDelegate<SettingsLocalization> {
+  const _SettingsLocalizationDelegate();
 
   @override
-  Future<SettingsLocalizations> load(Locale locale) {
-    return SynchronousFuture<SettingsLocalizations>(
-      lookupSettingsLocalizations(locale),
+  Future<SettingsLocalization> load(Locale locale) {
+    return SynchronousFuture<SettingsLocalization>(
+      lookupSettingsLocalization(locale),
     );
   }
 
@@ -124,20 +124,20 @@ class _SettingsLocalizationsDelegate
       <String>['en', 'ru'].contains(locale.languageCode);
 
   @override
-  bool shouldReload(_SettingsLocalizationsDelegate old) => false;
+  bool shouldReload(_SettingsLocalizationDelegate old) => false;
 }
 
-SettingsLocalizations lookupSettingsLocalizations(Locale locale) {
+SettingsLocalization lookupSettingsLocalization(Locale locale) {
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
     case 'en':
-      return SettingsLocalizationsEn();
+      return SettingsLocalizationEn();
     case 'ru':
-      return SettingsLocalizationsRu();
+      return SettingsLocalizationRu();
   }
 
   throw FlutterError(
-    'SettingsLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+    'SettingsLocalization.delegate failed to load unsupported locale "$locale". This is likely '
     'an issue with the localizations generation tool. Please file an issue '
     'on GitHub with a reproducible sample app and the gen-l10n configuration '
     'that was used.',

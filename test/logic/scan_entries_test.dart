@@ -1,7 +1,7 @@
 import 'dart:collection';
 import 'dart:io';
 
-import 'package:l10n_decompose/src/logic/directory_scanner.dart';
+import 'package:l10n_decompose/src/logic/scanner/arb_scanner.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
@@ -29,21 +29,5 @@ void main() {
     if (testDir.existsSync()) {
       testDir.deleteSync(recursive: true);
     }
-  });
-
-  test('throws DirectoryNotFoundException when directory does not exist', () {
-    expect(() => scanByPath('non_existent_directory'), throwsA(isA<DirectoryNotFoundException>()));
-  });
-
-  test('returns all subdirectories when no filters are applied', () {
-    final result = scanByPath(testDir.path);
-
-    expect(result, isA<List<Directory>>());
-    expect(result.length, 3);
-
-    expect(
-      UnmodifiableListView(result.map((dir) => p.basename(dir.path))),
-      containsAll(['subdir1', 'subdir2', 'subdir3']),
-    );
   });
 }

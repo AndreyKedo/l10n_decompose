@@ -1,21 +1,15 @@
 name: package_name
 
 l10n_decompose:
-  # Required
-  dir: lib/feature
+  # Optional; By default `lib/**/*_en.arb`
+  # Available patterns for template file:
+  # - *_en.arb
+  # - *_en_US.arb
+  # The prefix style can be any, but it is recommended to use the `snake_case` style.
+  input: lib/**/*_en.arb
 
-  # Optional; Use pattern *_en.arb or static name.
-  template-arb-file: "*_en.arb"
-
-  #Optional; By default l10n
-  arb-dir: l10n
-
-  #Optional; By default, the directory name "localization" is used, which will be created relative to.
-  # To place in an absolute directory, use / at the beginning of the path. For example /lib/core/localization
-  output-dir: localization
-
-  #Optional; By default use pattern *_localization.dart or static name.
-  output-localization-file: "*_localization.dart"
+  #Optional; By default `gen/*_localization.dart`
+  output: gen/*_localization.dart
 
   #Optional; By default use pattern *Localizations or static name.
   output-class: "*Localizations"
@@ -26,6 +20,7 @@ l10n_decompose:
   #Optional; By default true inherited from flutter gen-l10n
   nullable-getter: true
 
+  #Optional; By default false
   composite:
     # Required;
     enabled: true
@@ -34,17 +29,11 @@ l10n_decompose:
     # Optional; By default GeneralLocalizations
     outputClass: GeneralLocalizations
 
-  # Optional; 
+  # Optional; Customize output
   parts:
     # Required;
-    - name: home
-      # Optional; Use pattern *_en.arb or static name.
-      template-arb-file: home_en.arb
+    - name: core
       # Optional; By default use Global settings
-      arbDir: l10n
+      output: lib/core/localization/app_locale.dart
       # Optional; By default use Global settings
-      outputDir: localization
-      # Optional; By default use Global settings
-      outputLocalizationFile: main_locale.dart
-      # Optional; By default use Global settings
-      outputClass: MainLocale
+      outputClass: AppLocale

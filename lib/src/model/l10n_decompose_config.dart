@@ -5,24 +5,18 @@ import 'package:l10n_decompose/src/model/l10n_decompose_options.dart';
 ///
 /// Configure the l10n-decompose with the following options from the l10n-decompose.yaml file:
 ///```yaml
-///  # Required
-///  dir: lib/feature
+///  # Optional; By default `lib/**/*_en.arb`
+///  # Available patterns for template file:
+///  # - *_en.arb
+///  # - *_en_US.arb
+///  # The prefix style can be any, but it is recommended to use the `snake_case` style.
+///  input: lib/**/*_en.arb
 ///
-///  # Optional; Use pattern %_en.arb or static name.
-///  template-arb-file: "%_en.arb"
+///  #Optional; By default `gen/*_localization.dart`
+///  output: gen/*_localization.dart
 ///
-///  #Optional; By default l10n
-///  arb-dir: l10n
-///
-///  #Optional; By default, the directory name "localization" is used, which will be created relative to.
-///  # To place in an absolute directory, use / at the beginning of the path. For example /lib/core/localization
-///  output-dir: localization
-///
-///  #Optional; By default use pattern %_localization.dart or static name.
-///  output-localization-file: "%_localization.dart"
-///
-///  #Optional; By default use pattern %Localizations or static name.
-///  output-class: "%Localizations"
+///  #Optional; By default use pattern *Localizations or static name.
+///  output-class: "*Localizations"
 ///
 ///  #Optional; By default false inherited from flutter gen-l10n
 ///  format: false
@@ -38,29 +32,21 @@ import 'package:l10n_decompose/src/model/l10n_decompose_options.dart';
 ///    # Optional; By default CompositeLocalizations
 ///    outputClass: CompositeLocalizations
 ///
-///  # Optional;
+///  # Optional; Customize output
 ///  parts:
 ///    # Required;
-///    - name: home
-///      # Optional; Use pattern %_en.arb or static name.
-///      template-arb-file: home_en.arb
+///    - name: core
 ///      # Optional; By default use Global settings
-///      arbDir: l10n
+///      output: lib/core/localization/app_locale.dart
 ///      # Optional; By default use Global settings
-///      outputDir: localization
-///      # Optional; By default use Global settings
-///      outputLocalizationFile: main_locale.dart
-///      # Optional; By default use Global settings
-///      outputClass: MainLocale
+///      outputClass: AppLocale
 ///```
 /// {@endtemplate}
 class L10nDecomposeConfig {
   /// {@macro l10n_decompose_config}
   L10nDecomposeConfig({
-    required this.dir,
-    required this.arbDir,
-    required this.outputDir,
-    required this.outputLocalizationFile,
+    required this.inputPattern,
+    required this.output,
     required this.outputClass,
     required this.templateArbFile,
     required this.parts,
@@ -68,17 +54,9 @@ class L10nDecomposeConfig {
     required this.composite,
   });
 
-  /// The directory where the features are located.
-  final String dir;
+  final String inputPattern;
 
-  /// The directory where the arb files are located.
-  final String arbDir;
-
-  /// The directory where the output files are located.
-  final String outputDir;
-
-  /// The name of the output localization file.
-  final String outputLocalizationFile;
+  final String output;
 
   /// The name of the output class.
   final String outputClass;
@@ -87,7 +65,7 @@ class L10nDecomposeConfig {
   final String templateArbFile;
 
   /// The partial configurations for features.
-  final Set<LocalizationPartialConfig> parts;
+  final Map<String, LocalizationPartialConfig> parts;
 
   /// The options for the l10n-decompose.
   final L10nDecomposeOptions options;
@@ -98,13 +76,11 @@ class L10nDecomposeConfig {
   @override
   String toString() {
     return 'L10nDecomposeConfig(\n'
-        '\tpattern: $dir,\n'
-        '\tarbDir: $arbDir,\n'
-        '\toutputDir: $outputDir,\n'
-        '\toutputLocalizationFile: $outputLocalizationFile,\n'
+        '\tinputPattern: $inputPattern,\n'
+        '\toutputPattern: $output,\n'
         '\toutputClass: $outputClass,\n'
         '\tcomposite: $composite,\n'
-        '\tparts: $parts)';
+        '\tparts: ${parts.values.toList(growable: false)})';
   }
 }
 
@@ -112,58 +88,36 @@ class L10nDecomposeConfig {
 /// The partial config for a feature.
 ///
 /// ```yaml
-/// # Required;
-/// - name: home
-///   # Optional; Use pattern %_en.arb or static name.
-///   template-arb-file: home_en.arb
+///# Required;
+///- name: core
 ///   # Optional; By default use Global settings
-///   arbDir: l10n
+///   output: lib/core/localization/app_locale.dart
 ///   # Optional; By default use Global settings
-///   outputDir: localization
-///   # Optional; By default use Global settings
-///   outputLocalizationFile: main_locale.dart
-///   # Optional; By default use Global settings
-///   outputClass: MainLocale
+///   outputClass: AppLocale
 /// ```
 /// {@endtemplate}
 class LocalizationPartialConfig {
   /// {@macro l10n_decompose_config.partial_config}
   LocalizationPartialConfig({
     required this.name,
-    required this.arbDir,
-    required this.outputDir,
-    required this.outputLocalizationFile,
+    required this.output,
     required this.outputClass,
-    required this.templateArbFile,
   });
 
   /// The name of the feature.
   final String name;
 
-  /// The directory where the arb files are located.
-  final String? arbDir;
-
   /// The directory where the output files are located.
-  final String? outputDir;
-
-  /// The name of the output localization file.
-  final String? outputLocalizationFile;
+  final String? output;
 
   /// The name of the output class.
   final String? outputClass;
-
-  /// The name of the template arb file.
-  final String? templateArbFile;
 
   @override
   int get hashCode => Object.hash(
         runtimeType,
         name,
-        arbDir,
-        outputDir,
-        outputLocalizationFile,
         outputClass,
-        templateArbFile,
       );
 
   @override
@@ -172,21 +126,14 @@ class LocalizationPartialConfig {
       other is LocalizationPartialConfig &&
           runtimeType == other.runtimeType &&
           name == other.name &&
-          arbDir == other.arbDir &&
-          outputDir == other.outputDir &&
-          outputLocalizationFile == other.outputLocalizationFile &&
-          outputClass == other.outputClass &&
-          templateArbFile == other.templateArbFile;
+          outputClass == other.outputClass;
 
   @override
   String toString() {
     return 'LocalizationPartialConfig('
         'name: $name, '
-        'arbDir: $arbDir, '
-        'outputDir: $outputDir, '
-        'outputLocalizationFile: $outputLocalizationFile, '
         'outputClass: $outputClass, '
-        'templateArbFile: $templateArbFile)';
+        'output: $output)';
   }
 }
 

@@ -27,8 +27,8 @@ flutter:
   generate: true
 
 l10n_decompose:
-  # Required
-  dir: lib/feature
+  input: lib/**/**/*_en.arb
+  output: l10n/*_localization.dart
 
   format: true
   nullable-getter: false
@@ -36,12 +36,11 @@ l10n_decompose:
   composite:
     enabled: true
     # Optional; By default relative to lib directory.
-    outputFile: lib/core/composite_localizations.dart
+    outputFile: lib/core/l10n/composite_localizations.dart
     # Optional; By default CompositeLocalizations
     outputClass: CompositeLocalizations
 
   parts:
     - name: settings
-      template-arb-file: settings_en.arb
-      arbDir: localization/arb
-      outputDir: localization/gen
+      output: localization/gen/settings_locale.dart
+      outputClass: SettingsLocalization

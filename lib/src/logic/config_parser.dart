@@ -43,22 +43,21 @@ class ConfigParser with Converter<L10nManifest, L10nDecomposeConfig> {
     return null;
   }
 
-  Set<LocalizationPartialConfig> _parseParts(Object? value) {
+  Map<String, LocalizationPartialConfig> _parseParts(Object? value) {
     LocalizationPartialConfig parsePartialConfig(YamlMap input) {
       return LocalizationPartialConfig(
         name: _parseStringOrThrow(input['name']),
-        arbDir: _tryParseString(input['arbDir']),
-        outputDir: _tryParseString(input['outputDir']),
-        outputLocalizationFile: _tryParseString(input['outputLocalizationFile']),
-        templateArbFile: _tryParseString(input['template-arb-file']),
+        output: _tryParseString(input['output']),
         outputClass: _tryParseString(input['outputClass']),
       );
     }
 
     if (value is YamlList) {
-      return UnmodifiableSetView(value.whereType<YamlMap>().map((part) => parsePartialConfig(part)).toSet());
+      return UnmodifiableMapView(<String, LocalizationPartialConfig>{
+        for (final entry in value.whereType<YamlMap>()) _parseStringOrThrow(entry['name']): parsePartialConfig(entry),
+      });
     }
-    return const <LocalizationPartialConfig>{};
+    return const <String, LocalizationPartialConfig>{};
   }
 
   L10nDecomposeOptions _parseOptions(Map<String, Object?> input) {
@@ -91,13 +90,8 @@ class ConfigParser with Converter<L10nManifest, L10nDecomposeConfig> {
     validator.validate(configSource);
 
     return L10nDecomposeConfig(
-      dir: _parseString(configSource['dir'], DefaultL10nDecomposeConfig.defaultWorkDirectory),
-      arbDir: _parseString(configSource['arb-dir'], DefaultL10nDecomposeConfig.arbDir),
-      outputDir: _parseString(configSource['output-dir'], DefaultL10nDecomposeConfig.outputDir),
-      outputLocalizationFile: _parseString(
-        configSource['output-localization-file'],
-        DefaultL10nDecomposeConfig.outputLocalizationFile,
-      ),
+      inputPattern: _parseString(configSource['input'], DefaultL10nDecomposeConfig.defaultInputPattern),
+      output: _parseString(configSource['output'], DefaultL10nDecomposeConfig.defaultOutputPattern),
       composite: _parseComposite(configSource['composite']),
       outputClass: _parseString(configSource['output-class'], DefaultL10nDecomposeConfig.outputClass),
       templateArbFile: _parseString(configSource['template-arb-file'], DefaultL10nDecomposeConfig.templateArbFile),
@@ -116,16 +110,26 @@ class ConfigParserValidator implements SourceValidator<Map<String, Object?>> {
 
   @override
   void validate(Map<String, Object?> config) {
-    // Validate work directory
-    if (!config.containsKey('dir')) {
-      throw YamlValidationException(message: 'A work directory is required');
-    } else if (config['dir'] is! String || (config['dir'] is String && (config['dir'] as String).isEmpty)) {
-      throw YamlValidationException(message: 'pattern must be a string and not empty');
+    // Validate input pattern
+    if (config['input'] is! String) {
+      throw YamlValidationException(message: 'A input must be a string');
+    } else if (config['input'] case final String v when v.isEmpty) {
+      throw YamlValidationException(message: 'A input must not be empty');
+    }
+
+    // Validate output pattern
+    if (config['output'] is! String) {
+      throw YamlValidationException(message: 'A input must be a string');
+    } else if (config['output'] case final String v when v.isEmpty) {
+      throw YamlValidationException(message: 'A input must not be empty');
     }
 
     // Validate composite
     if (config['composite'] case YamlMap composite when !composite.containsKey('enabled')) {
       throw YamlValidationException(message: 'A key `composite`  must be contain `enabled` param');
+    } else if (config['composite'] case YamlMap composite
+        when composite['enabled'] != null && composite['enabled'] is! bool) {
+      throw YamlValidationException(message: 'A key `enabled` must be a boolean');
     }
 
     // Validate parts

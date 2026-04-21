@@ -15,10 +15,10 @@ extension type const DefaultL10nManifest(String value) implements String {
 /// Default values for the l10n-decompose.
 extension type const DefaultL10nDecomposeConfig(String value) implements String {
   static const l10nConfig = DefaultL10nDecomposeConfig('l10n.yaml');
-  static const defaultWorkDirectory = DefaultL10nDecomposeConfig('lib/feature');
-  static const arbDir = DefaultL10nDecomposeConfig('l10n');
-  static const outputDir = DefaultL10nDecomposeConfig('localization');
-  static const outputLocalizationFile = DefaultL10nDecomposeConfig('*_localization.dart');
+
+  static const defaultInputPattern = DefaultL10nDecomposeConfig('lib/**/*_en.arb');
+  static const defaultOutputPattern = DefaultL10nDecomposeConfig('gen/*_localization.dart');
+
   static const outputClass = DefaultL10nDecomposeConfig('*Localizations');
   static const preferredLocale = DefaultL10nDecomposeConfig('en');
   static const templateArbFile = DefaultL10nDecomposeConfig('*_$preferredLocale.arb');

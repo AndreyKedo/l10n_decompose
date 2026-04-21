@@ -18,20 +18,18 @@ void main() {
 
       final config = manifestParser.fuse(configDecode).convert(file);
 
-      expect(config.dir, equals('lib/feature'));
-      expect(config.arbDir, equals('l10n'));
-      expect(config.outputDir, equals('localization'));
-      expect(config.outputLocalizationFile, equals('%_localization.dart'));
-      expect(config.outputClass, equals('%Localizations'));
-      expect(config.templateArbFile, equals('%_en.arb'));
+      expect(config.inputPattern, equals('lib/**/*_en.arb'));
+      expect(config.output, equals('gen/*_localization.dart'));
+      expect(config.outputClass, equals('*Localizations'));
+      expect(config.templateArbFile, equals('*_en.arb'));
       expect(config.parts, hasLength(1));
-      final part = config.parts.first;
-      expect(part.name, equals('home'));
-      expect(part.templateArbFile, equals('home_en.arb'));
-      expect(part.arbDir, equals('l10n'));
-      expect(part.outputDir, equals('localization'));
-      expect(part.outputLocalizationFile, equals('main_locale.dart'));
-      expect(part.outputClass, equals('MainLocale'));
+
+      final part = config.parts.values.first;
+
+      expect(config.parts, isNotEmpty);
+      expect(part.name, equals('core'));
+      expect(part.output, equals('lib/core/localization/app_locale.dart'));
+      expect(part.outputClass, equals('AppLocale'));
       expect(config.options.isEnabled(L10nDecomposeOptionKey.nullableGetter), isTrue);
       expect(config.options.isEnabled(L10nDecomposeOptionKey.format), isFalse);
     });
