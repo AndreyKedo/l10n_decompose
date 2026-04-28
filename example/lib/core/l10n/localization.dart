@@ -8,6 +8,8 @@ import 'package:l10n_decompose_example/feature/settings/localization/gen/setting
 extension type ApplicationLocalization(BuildContext _context) {
   static final delegates = CompositeLocalizations.localizationsDelegates;
 
+  static final supportedLocales = CompositeLocalizations.supportedLocales;
+
   AppLocalizations get coreLcl => AppLocalizations.of(_context);
 
   ApplicationLocalizations get appLcl => ApplicationLocalizations.of(_context);

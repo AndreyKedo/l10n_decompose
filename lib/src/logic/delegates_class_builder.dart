@@ -3,6 +3,9 @@ import 'package:dart_style/dart_style.dart';
 import 'package:l10n_decompose/src/model/localization_node.dart';
 import 'package:path/path.dart' as p;
 
+/// Information about a locale.
+typedef LocaleInfo = ({String languageCode, String? countryCode});
+
 /// {@template delegates_class_builder}
 /// An object for generating source code for a composite delegate class.
 /// {@endtemplate}
@@ -12,17 +15,18 @@ class DelegatesClassBuilder {
   /// - [package] - package identifier.
   /// - [nodes] - a localization entries.
   /// - [className] - name for generated delegate class.
+  /// - [supportedLocales] - list of supported locale information.
   DelegatesClassBuilder({
     required this.package,
     required this.nodes,
     required this.className,
-    //this.supportedLocales = const ['en', 'ru'],
+    required this.supportedLocales,
   });
 
   final String package;
   final List<LocalizationNode> nodes;
   final String className;
-  //final List<String> supportedLocales;
+  final Iterable<LocaleInfo> supportedLocales;
 
   late final _dartFormatter = DartFormatter(
     languageVersion: DartFormatter.latestLanguageVersion,
@@ -58,7 +62,7 @@ class DelegatesClassBuilder {
         ..name = className
         ..fields.addAll([
           _buildLocalizationsDelegatesField(),
-          //_buildSupportedLocalesField(),
+          _buildSupportedLocalesField(),
         ]),
     );
   }
@@ -80,16 +84,22 @@ class DelegatesClassBuilder {
     );
   }
 
-  // Field _buildSupportedLocalesField() {
-  //   final localeType = refer('Locale', 'package:flutter/material.dart');
-  //   final locales = supportedLocales.map((lang) => localeType.call([literalString(lang)]).code).toList();
+  Field _buildSupportedLocalesField() {
+    final localeType = refer('Locale', 'package:flutter/material.dart');
+    final locales = supportedLocales.map((info) {
+      if (info.countryCode case final countryCode when countryCode != null) {
+        return localeType.call([literalString(info.languageCode), literalString(countryCode)]).code;
+      } else {
+        return localeType.call([literalString(info.languageCode)]).code;
+      }
+    });
 
-  //   return Field(
-  //     (b) => b
-  //       ..name = 'supportedLocales'
-  //       ..static = true
-  //       ..modifier = FieldModifier.constant
-  //       ..assignment = literalList(locales, localeType).code,
-  //   );
-  // }
+    return Field(
+      (b) => b
+        ..name = 'supportedLocales'
+        ..static = true
+        ..modifier = FieldModifier.constant
+        ..assignment = literalList(locales, localeType).code,
+    );
+  }
 }

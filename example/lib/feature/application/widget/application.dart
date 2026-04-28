@@ -9,7 +9,7 @@ final class Application extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       localizationsDelegates: ApplicationLocalization.delegates,
-      // supportedLocales: ApplicationDelegate.supportedLocales,
+      supportedLocales: ApplicationLocalization.supportedLocales,
       home: Builder(
         builder: (context) {
           final localization = ApplicationLocalization(context);

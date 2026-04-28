@@ -8,6 +8,7 @@ import 'package:l10n_decompose/src/logic/manifest_parser.dart';
 import 'package:l10n_decompose/src/logic/options_builder.dart';
 import 'package:l10n_decompose/src/logic/config_parser.dart';
 import 'package:l10n_decompose/src/logic/localization_node_generator.dart';
+import 'package:l10n_decompose/src/logic/scanner/arb_scanner.dart';
 import 'package:l10n_decompose/src/logic/scanner/glob_scanner.dart';
 import 'package:l10n_decompose/src/logic/yaml_validation_exception.dart';
 import 'package:l10n_decompose/src/model/l10n_decompose_options.dart';
@@ -113,12 +114,18 @@ class L10nDecomposeCommand {
         // Generate composite delegates file
         if (configuration.composite case final composite when composite != null) {
           final stopwatch = Stopwatch()..start();
+
           logger.d("Create a general localization delegates file...");
           final manifest = manifestParser.convert(manifestSource);
+
+          // Extract unique locales from all arb files
+          final allArbFiles = GlobScanner(lookupPattern: '**.arb').scan();
+
           final compositeFileBuilder = DelegatesClassBuilder(
             package: manifest.package,
             nodes: nodes,
             className: composite.outputClass,
+            supportedLocales: _extractSupportedLocales(allArbFiles),
           );
 
           File(composite.filePath).writeAsStringSync(compositeFileBuilder.build());
@@ -140,5 +147,14 @@ class L10nDecomposeCommand {
     } else {
       logger.i('Localization is completed');
     }
+  }
+
+  /// Извлекает информацию о локализации из имени файла и формирует уникальную коллекцию локалей.
+  Iterable<LocaleInfo> _extractSupportedLocales(List<ArbEntry> arbFiles) {
+    return <({String languageCode, String? countryCode})>{
+      for (final entry in arbFiles)
+        if (ArbEntry.parseArbFileName(entry.fileName) case final info when info != null)
+          (languageCode: info.locale, countryCode: info.country)
+    };
   }
 }
