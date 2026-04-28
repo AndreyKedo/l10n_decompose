@@ -183,6 +183,11 @@ abstract class GeneralLocalizations {
     AuthLocalizations.delegate,
     SettingsLocalizations.delegate,
   ];
+
+  static const supportedLocales = <Locale>[
+    Locale('ru'),
+    Locale('en'),
+  ];
 }
 ```
 
