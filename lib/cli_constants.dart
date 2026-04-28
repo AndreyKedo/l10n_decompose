@@ -16,7 +16,7 @@ extension type const DefaultL10nManifest(String value) implements String {
 extension type const DefaultL10nDecomposeConfig(String value) implements String {
   static const l10nConfig = DefaultL10nDecomposeConfig('l10n.yaml');
 
-  static const defaultInputPattern = DefaultL10nDecomposeConfig('lib/**/*_en.arb');
+  static const defaultInputPattern = DefaultL10nDecomposeConfig('**_en.arb');
   static const defaultOutputPattern = DefaultL10nDecomposeConfig('gen/*_localization.dart');
 
   static const outputClass = DefaultL10nDecomposeConfig('*Localizations');

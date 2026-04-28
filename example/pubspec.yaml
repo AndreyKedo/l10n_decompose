@@ -27,7 +27,7 @@ flutter:
   generate: true
 
 l10n_decompose:
-  input: lib/**/**/*_en.arb
+  input: "**_en.arb"
   output: l10n/*_localization.dart
 
   format: true

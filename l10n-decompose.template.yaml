@@ -1,12 +1,12 @@
 name: package_name
 
 l10n_decompose:
-  # Optional; By default `lib/**/*_en.arb`
+  # Optional; By default `"**_en.arb"`
   # Available patterns for template file:
-  # - *_en.arb
-  # - *_en_US.arb
+  # - **_en.arb
+  # - **_en_US.arb
   # The prefix style can be any, but it is recommended to use the `snake_case` style.
-  input: lib/**/*_en.arb
+  input: "**_en.arb"
 
   #Optional; By default `gen/*_localization.dart`
   output: gen/*_localization.dart
@@ -34,6 +34,8 @@ l10n_decompose:
     # Required;
     - name: core
       # Optional; By default use Global settings
-      output: lib/core/localization/app_locale.dart
+      # Relative - dir/app_locale.dart OR ./dir/app_locale.dart
+      # Absolute - /lib/app_locale.dart or lib/app_locale.dart
+      output: localization/app_locale.dart
       # Optional; By default use Global settings
       outputClass: AppLocale
