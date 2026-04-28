@@ -1,5 +1,5 @@
 name: l10n_decompose_example
-description: "A new Flutter project."
+description: "Example of l10n_decompose package"
 publish_to: 'none'
 version: 0.1.0
 
@@ -25,3 +25,22 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   generate: true
+
+l10n_decompose:
+  input: "**_en.arb"
+  output: l10n/*_localization.dart
+
+  format: true
+  nullable-getter: false
+
+  composite:
+    enabled: true
+    # Optional; By default relative to lib directory.
+    outputFile: lib/core/l10n/composite_localizations.dart
+    # Optional; By default CompositeLocalizations
+    outputClass: CompositeLocalizations
+
+  parts:
+    - name: settings
+      output: localization/gen/settings_locale.dart
+      outputClass: SettingsLocalization

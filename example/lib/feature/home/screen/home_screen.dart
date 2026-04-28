@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:l10n_decompose_example/core/localizations/application_delegate.dart';
-import 'package:l10n_decompose_example/feature/home/localization/home_localization.dart';
+import 'package:l10n_decompose_example/core/l10n/localization.dart';
 
 final class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final localization = HomeLocalizations.of(context);
+    final localization = ApplicationLocalization(context);
     return Scaffold(
-      appBar: AppBar(title: Text("${context.lcl.appName} - Home")),
-      body: Center(child: Text(localization.welcome)),
+      appBar: AppBar(title: Text("${localization.coreLcl.appName} - Home")),
+      body: Center(child: Text(localization.homeLcl.welcome)),
     );
   }
 }

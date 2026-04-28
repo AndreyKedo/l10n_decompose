@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:ansi_styles/ansi_styles.dart';
-import 'package:meta/meta.dart';
 
 extension type const ConsolePrinter._(Stdout out) {
   /// Prints a error message to the console.
@@ -25,7 +24,6 @@ extension type const ErrorConsolePrinter._(Stdout out) implements ConsolePrinter
   /// Creates a new instance of the ConsolePrinterError extension.
   factory ErrorConsolePrinter() => ErrorConsolePrinter._(stderr);
 
-  @redeclare
   void call(String message) {
     out.writeln(AnsiStyles.red('${AnsiStyles.bold('Error:')} $message'));
   }
@@ -34,7 +32,6 @@ extension type const ErrorConsolePrinter._(Stdout out) implements ConsolePrinter
 extension type const InfoConsolePrinter._(Stdout out) implements ConsolePrinter {
   factory InfoConsolePrinter() => InfoConsolePrinter._(stdout);
 
-  @redeclare
   void call(String message) {
     out.writeln(AnsiStyles.blue('Info: $message'));
   }
@@ -43,7 +40,6 @@ extension type const InfoConsolePrinter._(Stdout out) implements ConsolePrinter 
 extension type const WarningConsolePrinter._(Stdout out) implements ConsolePrinter {
   factory WarningConsolePrinter() => WarningConsolePrinter._(stdout);
 
-  @redeclare
   void call(String message) {
     out.writeln(AnsiStyles.yellow('Warning: $message'));
   }
