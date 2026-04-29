@@ -1,6 +1,8 @@
 name: package_name
 
 l10n_decompose:
+  # Optional;
+  enabled: true
   # Optional; By default `"**_en.arb"`
   # Available patterns for template file:
   # - **_en.arb

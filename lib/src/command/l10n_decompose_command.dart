@@ -56,6 +56,11 @@ class L10nDecomposeCommand {
 
       final configuration = manifestParser.fuse(configDecode).convert(manifestSource);
 
+      if (!configuration.enabled) {
+        logger.i('L10n decompose is disabled');
+        return;
+      }
+
       final arbFiles = GlobScanner(lookupPattern: configuration.inputPattern).scan();
 
       logger.d('Scanned directories: $arbFiles');

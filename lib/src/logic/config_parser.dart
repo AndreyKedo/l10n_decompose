@@ -90,6 +90,10 @@ class ConfigParser with Converter<L10nManifest, L10nDecomposeConfig> {
     validator.validate(configSource);
 
     return L10nDecomposeConfig(
+      enabled: switch (configSource['enabled']) {
+        bool value => value,
+        _ => true,
+      },
       inputPattern: _parseString(configSource['input'], DefaultL10nDecomposeConfig.defaultInputPattern),
       output: _parseString(configSource['output'], DefaultL10nDecomposeConfig.defaultOutputPattern),
       composite: _parseComposite(configSource['composite']),
@@ -110,6 +114,11 @@ class ConfigParserValidator implements SourceValidator<Map<String, Object?>> {
 
   @override
   void validate(Map<String, Object?> config) {
+    final enabled = config['enabled'];
+    if (enabled != null && enabled is! bool) {
+      throw YamlValidationException(message: 'A key `enabled` must be a boolean');
+    }
+
     // Validate input pattern
     if (config['input'] is! String) {
       throw YamlValidationException(message: 'A input must be a string');

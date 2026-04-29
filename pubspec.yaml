@@ -1,6 +1,6 @@
 name: l10n_decompose
 description: This CLI generate decomposed localization by different directories for each feature.
-version: 1.0.0
+version: 1.0.0+1
 repository: https://github.com/AndreyKedo/l10n_decompose
 issue_tracker: https://github.com/AndreyKedo/l10n_decompose/issues
 

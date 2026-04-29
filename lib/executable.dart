@@ -26,7 +26,7 @@ void main(List<String> arguments) {
 
   final argParser = buildParser();
   try {
-    final ArgResults results = argParser.parse(arguments);
+    final results = argParser.parse(arguments);
     AppLogger.enableLogger();
 
     // Process the parsed arguments.

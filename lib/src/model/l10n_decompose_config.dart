@@ -5,12 +5,15 @@ import 'package:l10n_decompose/src/model/l10n_decompose_options.dart';
 ///
 /// Configure the l10n-decompose with the following options from the l10n-decompose.yaml file:
 ///```yaml
+///  # Optional;
+///  enabled: true
+///
 ///  # Optional; By default `lib/**/*_en.arb`
 ///  # Available patterns for template file:
 ///  # - *_en.arb
 ///  # - *_en_US.arb
 ///  # The prefix style can be any, but it is recommended to use the `snake_case` style.
-///  input: lib/**/*_en.arb
+///  input: "**_en.arb"
 ///
 ///  #Optional; By default `gen/*_localization.dart`
 ///  output: gen/*_localization.dart
@@ -37,6 +40,8 @@ import 'package:l10n_decompose/src/model/l10n_decompose_options.dart';
 ///    # Required;
 ///    - name: core
 ///      # Optional; By default use Global settings
+///      # Relative - dir/app_locale.dart OR ./dir/app_locale.dart
+///      # Absolute - /lib/app_locale.dart or lib/app_locale.dart
 ///      output: lib/core/localization/app_locale.dart
 ///      # Optional; By default use Global settings
 ///      outputClass: AppLocale
@@ -45,6 +50,7 @@ import 'package:l10n_decompose/src/model/l10n_decompose_options.dart';
 class L10nDecomposeConfig {
   /// {@macro l10n_decompose_config}
   L10nDecomposeConfig({
+    required this.enabled,
     required this.inputPattern,
     required this.output,
     required this.outputClass,
@@ -54,8 +60,13 @@ class L10nDecomposeConfig {
     required this.composite,
   });
 
+  /// Whether the l10n-decompose is enabled.
+  final bool enabled;
+
+  /// Pattern for input template arb file.
   final String inputPattern;
 
+  /// Pattern for output localization files.
   final String output;
 
   /// The name of the output class.
@@ -76,6 +87,7 @@ class L10nDecomposeConfig {
   @override
   String toString() {
     return 'L10nDecomposeConfig(\n'
+        '\tenabled: $enabled,\n'
         '\tinputPattern: $inputPattern,\n'
         '\toutputPattern: $output,\n'
         '\toutputClass: $outputClass,\n'
